@@ -48,22 +48,48 @@ public class Main {
         //System.out.println("Etat cellule hors limite : " + grid.getCellStateAt(new Position(10, 10)));
 
         // Initialisation de la configuration initiale
-        Set<Position> aliveCells = new HashSet<>();
-        aliveCells.add(new Position(1, 1));
-        aliveCells.add(new Position(1, 2));
-        aliveCells.add(new Position(2, 1));
-        aliveCells.add(new Position(2, 2));
+        //Set<Position> aliveCells = new HashSet<>();
+        //aliveCells.add(new Position(1, 1));
+        //aliveCells.add(new Position(1, 2));
+        //aliveCells.add(new Position(2, 1));
+        //aliveCells.add(new Position(2, 2));
 
         // Création de la grille 5x5 avec des cellules vivantes initiales
-        Grid grid = new Grid(5, 5, aliveCells);
+        //Grid grid = new Grid(5, 5, aliveCells);
 
         // Création de la simulation du jeu de la vie pour 10 itérations
-        GameOfLife gameOfLife = new GameOfLife(grid, 10);
+        //GameOfLife gameOfLife = new GameOfLife(grid, 10);
 
         // Exécution de la simulation
-        System.out.println("Simulation commence...");
-        gameOfLife.execute();
-        System.out.println("Simulation terminée.");
+        //System.out.println("Simulation commence...");
+        //gameOfLife.execute();
+        //System.out.println("Simulation terminée.");
+        try {
+            // Initialisation de la configuration initiale des cellules vivantes
+            Set<Position> aliveCells = new HashSet<>();
+            aliveCells.add(new Position(61, 51));
+            aliveCells.add(new Position(16, 52));
+            aliveCells.add(new Position(26, 14));
+            aliveCells.add(new Position(24, 52));
+            aliveCells.add(new Position(61, 56));
+            aliveCells.add(new Position(16, 2));
+            aliveCells.add(new Position(52, 15));
+            aliveCells.add(new Position(42, 25));
+
+
+            // Création de la grille 5x5 avec des cellules vivantes
+            Grid grid = new Grid(100, 100, aliveCells);
+
+            // Affichage de la grille
+            System.out.println(grid);
+
+
+
+        } catch (InvalidGridSizeException e) {
+            System.out.println("Erreur : " + e.getMessage());
+        } catch (PositionOutOfBoundsException e) {
+            System.out.println("Erreur : " + e.getMessage());
+        }
 
     }
 

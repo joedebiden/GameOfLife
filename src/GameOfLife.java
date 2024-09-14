@@ -1,3 +1,6 @@
+import java.util.HashSet;
+import java.util.Set;
+
 public class GameOfLife {
 
     private Grid grid;
@@ -31,8 +34,10 @@ public class GameOfLife {
     }
 
     // Méthode privée pour calculer la prochaine génération de la grille
-    private Grid calculateNextGeneration() {
-        Grid nextGrid = new Grid(grid.getRows(), grid.getColumns());
+    private Grid calculateNextGeneration() throws InvalidGridSizeException, PositionOutOfBoundsException{
+
+        Set<Position> nextAliveCells = new HashSet<>();  // Ensemble pour les cellules vivantes de la prochaine génération
+
         for (int row = 0; row < grid.getRows(); row++) {
             for (int col = 0; col < grid.getColumns(); col++) {
                 Position pos = new Position(row, col);
@@ -42,16 +47,14 @@ public class GameOfLife {
                 // Règles du jeu de la vie :
                 // 1. Une cellule vivante reste vivante si elle a 2 ou 3 voisins vivants, sinon elle meurt.
                 // 2. Une cellule morte devient vivante si elle a exactement 3 voisins vivants.
-                if (isAlive && (aliveNeighbors == 2 || aliveNeighbors == 3)) {
-                    nextGrid.setCellStateAt(pos, true);
-                } else if (!isAlive && aliveNeighbors == 3) {
-                    nextGrid.setCellStateAt(pos, true);
-                } else {
-                    nextGrid.setCellStateAt(pos, false);
+                if ((isAlive && (aliveNeighbors == 2 || aliveNeighbors == 3)) ||
+                        (!isAlive && aliveNeighbors == 3)) {
+                    nextAliveCells.add(pos);  // Ajouter la position à l'ensemble des cellules vivantes
                 }
             }
         }
-        return nextGrid;
+        // Créer la nouvelle grille avec les cellules vivantes calculées
+        return new Grid(grid.getRows(), grid.getColumns(), nextAliveCells);
     }
 
     // Méthode pour compter le nombre de cellules vivantes voisines d'une position donnée

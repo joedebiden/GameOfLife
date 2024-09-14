@@ -8,33 +8,40 @@ public class Grid {
 
     private static final int DEFAULT_SIZE = 50;
 
-    // Constructeur pour créer une grille vide avec une taille donnée
-    public Grid(int rows, int columns) {
-        // Validation des paramètres, on utilise la taille par défaut si les dimensions sont incohérentes
-        this.rows = (rows > 0) ? rows : DEFAULT_SIZE;
-        this.columns = (columns > 0) ? columns : DEFAULT_SIZE;
-        this.grid = new boolean[this.rows][this.columns]; // Initialisation de la grille avec des cellules mortes
-    }
 
-    // Constructeur avec une configuration initiale de cellules vivantes
-    public Grid(int rows, int columns, Set<Position> initialAlivePositions) {
-        // Appel du constructeur principal pour la taille
-        this(rows, columns);
-        // Ajout des cellules vivantes à la grille (en vérifiant que les positions sont dans les limites)
-        for (Position pos : initialAlivePositions) {
-            if (isValidPosition(pos)) {
-                grid[pos.getRow()][pos.getColumn()] = true; // Cellule vivante
+
+
+    // Constructeur
+    public Grid(int rows, int columns, Set<Position> aliveCells) throws InvalidGridSizeException, PositionOutOfBoundsException {
+        // Vérification de la taille de la grille
+        if (rows <= 0 || columns <= 0) {
+            throw new InvalidGridSizeException("La taille de la grille est invalide.");
+        }
+
+        this.rows = rows;
+        this.columns = columns;
+        this.grid = new boolean[rows][columns];
+
+        // Ajout des cellules vivantes à la grille
+        for (Position pos : aliveCells) {
+            if (pos.getRow() < 0 || pos.getRow() >= rows || pos.getColumn() < 0 || pos.getColumn() >= columns) {
+                throw new PositionOutOfBoundsException("La position (" + pos.getRow() + ", " + pos.getColumn() + ") est en dehors de la grille.");
             }
+            grid[pos.getRow()][pos.getColumn()] = true;
         }
     }
+
 
     //méthode pour vérif la pos si elle est valide
     private boolean isValidPosition(Position pos){
         return pos.getRow() >= 0 && pos.getRow() < rows && pos.getColumn() >= 0 && pos.getColumn() < columns;
     }
 
+
     public int getRows() {return rows;}
     public int getColumns() {return columns;}
+
+
 
     // avoir l'état de la cellule
     public boolean getCellStateAt(Position pos) {
@@ -77,4 +84,6 @@ public class Grid {
         return sb.toString();
     }
 
+
 }
+
