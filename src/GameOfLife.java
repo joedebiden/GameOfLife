@@ -7,29 +7,22 @@ public class GameOfLife {
     private int iterations;
     private static final int  DEFAULT_ITERATIONS = 100;
 
-    public GameOfLife(Grid grid, int interations) {
+    private final Display display;
+
+    public GameOfLife(Grid grid, int interations, Display display) {
         this.grid = grid;
         //si iterations est incohérent alors valeurs par défaut
         this.iterations = (interations > 0) ? interations : DEFAULT_ITERATIONS;
+        this.display = display;
+        display.notifyNewSimulation(iterations, grid.getRows(), grid.getColumns());
     }
 
     //methode pour exécuter la simulation
     public void execute() {
-        try {
-            System.out.println("Début de la simulation du Jeu de la Vie");
-
-            for (int i = 1; i <= iterations; i++) {
-                System.out.println("Itération : " + i);
-                System.out.println("Nombre de cellules vivantes : " + grid.getAliveCellCount());
-                System.out.println(grid); // Affiche la grille sous forme d'ASCII Art
-
-                // Calcul de la grille à la génération suivante
-                grid = calculateNextGeneration();
-            }
-
-            System.out.println("Fin de la simulation");
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (int i = 0; i < iterations; i ++ ) {
+            Set<Position> aliveCells = grid.getAliveCellCount();
+            display.notifyNewGeneration(i, aliveCells);
+            grid = calculateNextGeneration();
         }
     }
 
