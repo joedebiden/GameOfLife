@@ -1,10 +1,11 @@
+import java.util.HashSet;
 import java.util.Set;
 
 public class Grid {
 
     private final int rows;
     private final int columns;
-    private final boolean [][] grid;
+    private final Set<Position> aliveCells; //stocke uniquement que les cellules vivantes
 
     private static final int DEFAULT_SIZE = 50;
 
@@ -20,14 +21,14 @@ public class Grid {
 
         this.rows = rows;
         this.columns = columns;
-        this.grid = new boolean[rows][columns];
+        this.aliveCells = new HashSet<>();
 
         // Ajout des cellules vivantes à la grille
         for (Position pos : aliveCells) {
-            if (pos.getRow() < 0 || pos.getRow() >= rows || pos.getColumn() < 0 || pos.getColumn() >= columns) {
+            if (!isValidPosition(pos)) {
                 throw new PositionOutOfBoundsException("La position (" + pos.getRow() + ", " + pos.getColumn() + ") est en dehors de la grille.");
             }
-            grid[pos.getRow()][pos.getColumn()] = true;
+            this.aliveCells.add(pos);
         }
     }
 
@@ -44,16 +45,23 @@ public class Grid {
 
 
     // avoir l'état de la cellule
+    // public boolean getCellStateAt(Position pos) {return alive.Cells.contains(pos); }
     public boolean getCellStateAt(Position pos) {
         if (isValidPosition(pos)){
-            return grid[pos.getRow()][pos.getColumn()];
+            return aliveCells.contains(pos); //si la pos est dans set alors cellule vivante
 
         }return false; //hors de la grille => cellule morte
     }
 
-    public void setCellStateAt(Position pos, boolean isAlive) {
-        if (isValidPosition(pos)) {
-            grid[pos.getRow()][pos.getColumn()] = isAlive;
+    // modifier état de la cellule
+    public void setCellStateAt(Position pos, boolean isAlive) throws PositionOutOfBoundsException {
+        if (!isValidPosition(pos)) {
+            throw new PositionOutOfBoundsException("Position hors des limites.");
+        }
+        if (isAlive) {
+            aliveCells.add(pos);
+        } else {
+            aliveCells.remove(pos);
         }
     }
 
@@ -61,14 +69,7 @@ public class Grid {
 
     // avoir le nombre de cellule vivante
     public int getAliveCellCount() {
-        int count = 0;
-        for (int i = 0; i < rows; i ++ ) {
-            for (int j = 0; j < columns; j ++) {
-                if (grid[i][j]) {
-                    count++;
-                }
-            }
-        } return count;
+        return aliveCells.size();
     }
 
     // Méthode toString pour une représentation en Ascii-Art de la grille
@@ -77,7 +78,8 @@ public class Grid {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                sb.append(grid[i][j] ? "*" : "."); // Cellule vivante => "*", Cellule morte => "."
+                Position pos = new Position(i, j);
+                sb.append(aliveCells.contains(pos) ? "*" : "."); // Cellule vivante => "*", Cellule morte => "."
             }
             sb.append("\n"); // Nouvelle ligne après chaque rangée
         }

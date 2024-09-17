@@ -67,18 +67,18 @@ public class Main {
         try {
             // Initialisation de la configuration initiale des cellules vivantes
             Set<Position> aliveCells = new HashSet<>();
-            aliveCells.add(new Position(61, 51));
-            aliveCells.add(new Position(16, 52));
+            aliveCells.add(new Position(21, 41));
+            aliveCells.add(new Position(16, 49));
             aliveCells.add(new Position(26, 14));
-            aliveCells.add(new Position(24, 52));
-            aliveCells.add(new Position(61, 56));
+            aliveCells.add(new Position(24, 42));
+            aliveCells.add(new Position(11, 6));
             aliveCells.add(new Position(16, 2));
-            aliveCells.add(new Position(52, 15));
+            aliveCells.add(new Position(19, 15));
             aliveCells.add(new Position(42, 25));
 
 
             // Création de la grille 5x5 avec des cellules vivantes
-            Grid grid = new Grid(100, 100, aliveCells);
+            Grid grid = new Grid(50, 50, aliveCells);
 
             // Affichage de la grille
             System.out.println(grid);
