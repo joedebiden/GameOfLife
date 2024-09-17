@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,11 +9,30 @@ public class Grid {
     private final int columns;
     private final Set<Position> aliveCells; //stocke uniquement que les cellules vivantes
 
-
     private static final int DEFAULT_SIZE = 50;
 
 
+    public static Grid fromText(BufferedReader reader) throws IOException, InvalidGridSizeException, PositionOutOfBoundsException {
+        // Lire la première ligne pour obtenir les dimensions
+        String[] dimensions = reader.readLine().split(" ");
+        int rows = Integer.parseInt(dimensions[0]);
+        int columns = Integer.parseInt(dimensions[1]);
 
+        // Lire la deuxième ligne pour obtenir le nombre de cellules vivantes
+        int numberOfAliveCells = Integer.parseInt(reader.readLine());
+
+        // Lire les positions des cellules vivantes
+        Set<Position> aliveCells = new HashSet<>();
+        for (int i = 0; i < numberOfAliveCells; i++) {
+            String[] positionTokens = reader.readLine().split(" ");
+            int row = Integer.parseInt(positionTokens[0]);
+            int col = Integer.parseInt(positionTokens[1]);
+            aliveCells.add(new Position(row, col));
+        }
+
+        // Retourner une nouvelle instance de Grid avec les informations lues
+        return new Grid(rows, columns, aliveCells);
+    }
 
     // Constructeur
     public Grid(int rows, int columns, Set<Position> aliveCells) throws InvalidGridSizeException, PositionOutOfBoundsException {

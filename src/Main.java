@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,36 +67,49 @@ public class Main {
         //System.out.println("Simulation commence...");
         //gameOfLife.execute();
         //System.out.println("Simulation terminée.");
-        try {
+        //try {
             // Initialisation de la configuration initiale des cellules vivantes
-            Set<Position> aliveCells = new HashSet<>();
-            aliveCells.add(new Position(21, 41));
-            aliveCells.add(new Position(16, 49));
-            aliveCells.add(new Position(26, 14));
-            aliveCells.add(new Position(24, 42));
-            aliveCells.add(new Position(11, 6));
-            aliveCells.add(new Position(16, 2));
-            aliveCells.add(new Position(19, 15));
-            aliveCells.add(new Position(42, 25));
+        //Set<Position> aliveCells = new HashSet<>();
+        //aliveCells.add(new Position(21, 41));
+        //aliveCells.add(new Position(16, 49));
+        //aliveCells.add(new Position(26, 14));
+        //aliveCells.add(new Position(24, 42));
+        //aliveCells.add(new Position(11, 6));
+        //aliveCells.add(new Position(16, 2));
+        //aliveCells.add(new Position(19, 15));
+        //aliveCells.add(new Position(42, 25));
 
 
             // Création de la grille 5x5 avec des cellules vivantes
-            Grid grid = new Grid(50, 50, aliveCells);
+        //Grid grid = new Grid(50, 50, aliveCells);
 
             // Affichage de la grille
-            System.out.println(grid);
+        //System.out.println(grid);
 
 
 
-        } catch (InvalidGridSizeException e) {
-            System.out.println("Erreur : " + e.getMessage());
-        } catch (PositionOutOfBoundsException e) {
-            System.out.println("Erreur : " + e.getMessage());
+        //} catch (InvalidGridSizeException e) {
+        //System.out.println("Erreur : " + e.getMessage());
+        //} catch (PositionOutOfBoundsException e) {
+        //System.out.println("Erreur : " + e.getMessage());
+        // }
+
+        if (args.length !=1) {
+            System.out.println("Usage : java Main input_file");
+            return;
         }
+        String filePath = args[0];
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            Grid grid = Grid.fromText(reader);
+            System.out.println("config initiale de la grille :");
+            System.out.println(grid);
+            GameOfLife gameOfLife = new GameOfLife(grid, 25, new ConsoleDisplay());
 
+        } catch (IOException e) {
+            System.err.println("Erreur lecture du fichier : " + e.getMessage());
+
+        } catch (InvalidGridSizeException | PositionOutOfBoundsException e ){
+            System.err.println("Erreur config grille : " + e.getMessage());
+        }
     }
-
-
-
-
 }
