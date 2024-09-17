@@ -18,9 +18,9 @@ public class GameOfLife {
     }
 
     //methode pour exécuter la simulation
-    public void execute() {
-        for (int i = 0; i < iterations; i ++ ) {
-            Set<Position> aliveCells = grid.getAliveCellCount();
+    public void execute() throws InvalidGridSizeException, PositionOutOfBoundsException {
+        for (int i = 0; i < iterations; i++) {
+            Set<Position> aliveCells = grid.getAliveCells();
             display.notifyNewGeneration(i, aliveCells);
             grid = calculateNextGeneration();
         }

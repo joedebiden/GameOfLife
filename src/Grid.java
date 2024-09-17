@@ -7,6 +7,7 @@ public class Grid {
     private final int columns;
     private final Set<Position> aliveCells; //stocke uniquement que les cellules vivantes
 
+
     private static final int DEFAULT_SIZE = 50;
 
 
@@ -65,11 +66,14 @@ public class Grid {
         }
     }
 
-
-
     // avoir le nombre de cellule vivante
     public int getAliveCellCount() {
         return aliveCells.size();
+    }
+
+    //methode qui retounre un Set de toutes les positions des cellules vivantes
+    public Set<Position> getAliveCells() {
+        return new HashSet<>(aliveCells);
     }
 
     // Méthode toString pour une représentation en Ascii-Art de la grille
